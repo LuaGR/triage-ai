@@ -1,0 +1,27 @@
+[
+  {
+    "id": "T001",
+    "mensaje": "¿Dónde está mi pedido? Ya pasaron 3 días.",
+    "origen": "WhatsApp"
+  },
+  {
+    "id": "T002",
+    "mensaje": "Me cobraron dos veces en la tarjeta de crédito.",
+    "origen": "Email"
+  },
+  {
+    "id": "T003",
+    "mensaje": "La app no me deja subir las fotos de mis telares, se queda cargando.",
+    "origen": "WhatsApp"
+  },
+  {
+    "id": "T004",
+    "mensaje": "I need help with my order, it arrived broken.",
+    "origen": "Email"
+  },
+  {
+    "id": "T005",
+    "mensaje": "¡SON UNOS ESTAFADORES, QUIERO HABLAR CON UN GERENTE AHORA!",
+    "origen": "WhatsApp"
+  }
+]

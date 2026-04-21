@@ -1,7 +1,14 @@
 import * as readline from 'readline';
 import { ClassificationResult, Category } from '../models';
+import { HITL_THRESHOLD } from '../config';
 
 const CATEGORIES: readonly Category[] = ['envios', 'pagos', 'catalogo', 'spam'];
+
+export function needsHumanIntervention(classification: { categoria: Category | 'requiere_humano'; confianza: number }): boolean {
+  return classification.categoria === 'spam' || 
+         classification.categoria === 'requiere_humano' || 
+         classification.confianza < HITL_THRESHOLD;
+}
 
 export async function askUser(question: string): Promise<string> {
   const rl = readline.createInterface({

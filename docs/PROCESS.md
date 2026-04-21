@@ -117,7 +117,7 @@ Intervención Humana Requerida. Seleccione la categoría real:
 | T004: "order", "broken" → envios | ✅ Coincide |
 | T005: "estafadores", "gerente" → spam | ✅ Coincide |
 
-**Québusqué**:
+**Qué busqué**:
 - ¿El razonamiento menciona keywords que existen en el mensaje original?
 - ¿La categoría es lógica dado el contenido?
 - ¿Hay algo en el razonamiento que no esté en el mensaje?

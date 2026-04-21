@@ -1,0 +1,4 @@
+export const HITL_THRESHOLD = 0.5;
+export const GROQ_PROMPT_PRICE_PER_1K = 0.05;
+export const GROQ_COMPLETION_PRICE_PER_1K = 0.08;
+export const APP_TITLE = 'TRIAGE AI - CLASIFICADOR DE TICKETS';

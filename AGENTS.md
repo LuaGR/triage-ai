@@ -32,9 +32,21 @@ The agent is forced via System Prompt and Structured Outputs to return exclusive
 
 ```typescript
 {
-  "categoria": "envios" | "pagos" | "catalogo" | "requiere_humano",
+  "categoria": "envios" | "pagos" | "catalogo" | "spam" | "requiere_humano",
   "confianza": 0.0 to 1.0,
   "razonamiento": "Explanation of maximum 2 lines justifying the categorization"
+}
+```
+
+### Output with HITL Flag
+When processed through the CLI with Human-in-the-Loop:
+
+```typescript
+{
+  "categoria": "spam",
+  "confianza": 1.0,
+  "razonamiento": "Clasificación manual por operador. Categoría: spam",
+  "resolved_by": "Human"  // or "AI"
 }
 ```
 

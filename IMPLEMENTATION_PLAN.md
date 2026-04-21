@@ -186,24 +186,63 @@ console.table()
   * Run script.
 
 ---
-##  Phase 6: Interactive Human-in-the-Loop (HITL) Implementation
+## Phase 6: Interactive Human-in-the-Loop (HITL) Implementation
 
-* [ ] Setup a `readline` interface to handle asynchronous user input from the terminal.
-* [ ] Add evaluation logic: If the LLM returns `"categoria": "requiere_humano"` or `"confianza" < 0.85`, pause script execution.
-* [ ] Display the complex ticket and prompt the user to manually select the correct category (e.g., `[1] envios, [2] pagos, [3] catalogo, [4] spam`).
-* [ ] Append a flag `resolved_by: "AI"` or `resolved_by: "Human"` to the final parsed object.
+* [x] Setup `readline` interface for async user input from terminal.
+* [x] Add evaluation logic: If `categoria === "requiere_humano"` or `confianza < 0.5`, pause script execution.
+* [x] Display alert box with ticket info, confianza, and razón:
+  ```
+  ⚠️  ALERTA: La IA no pudo clasificar el ticket T005
+     Confianza: 0%
+     Razón: El cliente utiliza lenguaje agresivo...
+     Mensaje: "¡SON UNOS ESTAFADORES..."
+  
+  Intervención Humana Requerida. Seleccione la categoría real:
+  [1] envios  [2] pagos  [3] catalogo  [4] spam
+  > _
+  ```
+* [x] Append flag `resolved_by: "AI"` or `resolved_by: "Human"` to result object.
+
+### HITL Output Format
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│ ⚠️  ALERTA: La IA no pudo clasificar el ticket T005                   │
+│    Confianza: 0%                                                    │
+├──────────────────────────────────────────────────────────────────┤
+│    Razón: El cliente utiliza un lenguaje agresivo y exige hablar...│
+├──────────────────────────────────────────────────────────────────┤
+│    Mensaje: "¡SON UNOS ESTAFADORES, QUIERO HABLAR..." │
+└──────────────────────────────────────────────────────────────────┘
+
+   Intervención Humana Requerida. Seleccione la categoría real:
+   [1] envios  [2] pagos  [3] catalogo  [4] spam
+   > _
+```
+
 ---
-##  Phase 7: Execution Loop & AI Ops Metrics
+## Phase 7: Execution Loop & AI Ops Metrics
 
-* [ ] Create a `main()` function.
-* [ ] Initialize tracking variables for execution time (`performance.now()`), total prompt tokens, and total completion tokens.
-* [ ] Iterate through the `tickets.json` array.
-* [ ] Await the classification for each ticket (triggering the HITL pause when necessary).
-* [ ] Store the results and update the token/time metrics.
-* [ ] Output the final classification results using `console.table()`.
-* [ ] Print an "AI Ops Summary Report" showing:
-  * Total execution time.
-  * Number of tickets resolved by AI vs. Human.
-  * Total tokens consumed.
-  * Estimated API cost.
+* [x] Initialize tracking variables: `performance.now()`, prompt tokens, completion tokens.
+* [x] Iterate through `tickets.json`, trigger HITL pause when necessary.
+* [x] Store results with `resolved_by` flag.
+* [x] Print "Reporte de Operaciones AI" at the end.
+
+### AI Ops Summary Format
+
+```
+═══════════════════════════════════════════════════════════════════════
+                    📊 Reporte de Operaciones AI:                     
+═══════════════════════════════════════════════════════════════════════
+
+   - Tickets Procesados: 5
+   - Resueltos por IA: 4
+   - Escalados a Humano: 1
+   - Tiempo total de ejecución: 3.3 segundos
+   - Tokens Consumidos: 750 (Prompt) / 150 (Completion)
+   - Costo Estimado: $0.0495 USD
+
+═══════════════════════════════════════════════════════════════════════
+```
+
 ---

@@ -12,13 +12,15 @@ Eres un clasificador de tickets para 'PuebloLindo'. Clasifica el mensaje en UNA 
 - "envios": Consulta sobre estado de pedido, entrega, shipping o ubicación.
 - "pagos": Menciona cobros, tarjetas, reembolsos, facturación o precios.
 - "catalogo": Pregunta sobre productos, fotos, uso de la plataforma.
-- "requiere_humano": Agresivo, insultos, exige gerente, o no clasificable.
+- "spam": Mensajes agresivos, insultos, spam, sin sentido.
+- "requiere_humano": No clasificable en las anteriores.
 
 REGLAS:
 1. JSON válido con: "categoria", "confianza", "razonamiento".
-2. Cualquier duda → requiere_humano.
-3. Confianza: 0.0 a 1.0.
-4. Razonamiento: máximo 2 líneas.
+2. Mensajes agresivos o spam → spam.
+3. Cualquier duda → requiere_humano.
+4. Confianza: 0.0 a 1.0.
+5. Razonamiento: máximo 2 líneas.
 ```
 
 ### Prompts que Fallaron
@@ -45,13 +47,44 @@ Clasifica este mensaje en: envios, pagos, catalogo, o requiere_humano
 
 ### Cambio 2: CLI en Lugar de Interfaz Web
 
-**Antes**: Se considerou una interfaz web (Next.js) o API REST para ejecutar el clasificador.  
+**Antes**: Se省委 una interfaz web (Next.js) o API REST para ejecutar el clasificador.  
 **Después**: Script CLI que procesa un archivo JSON estático directamente en terminal.
 
 **Por qué**: 
 - Enfoque en valor de IA, no en infraestructura
 - Sin deployment overhead
 - MVP rápido y ejecutable inmediatamente
+
+### Cambio 3: Human-in-the-Loop (HITL)
+
+**Problema**: Algunos tickets necesitan intervención humana (baja confianza o casos ambiguos).  
+**Solución**: Implementar pausa interactiva que muestra ticket, confianza, razón y permite selección manual.
+
+```
+⚠️  ALERTA: La IA no pudo clasificar el ticket T005
+   Confianza: 0%
+   Razón: El cliente utiliza lenguaje agresivo...
+   Mensaje: "¡SON UNOS ESTAFADORES..."
+
+Intervención Humana Requerida. Seleccione la categoría real:
+[1] envios  [2] pagos  [3] catalogo  [4] spam
+> _
+```
+
+### Cambio 4: AI Ops Metrics
+
+**Problema**: No había forma de saber el rendimiento del sistema.  
+**Solución**: Reporte final con métricas de ejecución.
+
+```
+📊 Reporte de Operaciones AI:
+   - Tickets Procesados: 5
+   - Resueltos por IA: 4
+   - Escalados a Humano: 1
+   - Tiempo total de ejecución: 3.3 segundos
+   - Tokens Consumidos: 750 (Prompt) / 150 (Completion)
+   - Costo Estimado: $0.0495 USD
+```
 
 ---
 
@@ -82,7 +115,7 @@ Clasifica este mensaje en: envios, pagos, catalogo, o requiere_humano
 | T002: "cobrar", "tarjeta" → pagos | ✅ Coincide |
 | T003: "fotos", "app" → catalogo | ✅ Coincide |
 | T004: "order", "broken" → envios | ✅ Coincide |
-| T005: "estafadores", "gerente" → requiere_humano | ✅ Coincide |
+| T005: "estafadores", "gerente" → spam | ✅ Coincide |
 
 **Québusqué**:
 - ¿El razonamiento menciona keywords que existen en el mensaje original?
@@ -99,7 +132,7 @@ Clasifica este mensaje en: envios, pagos, catalogo, o requiere_humano
 | T002 | Me cobraron dos veces | pagos | El modelo correctamente identificó "cobrar" |
 | T003 | La app no me deja subir fotos | catalogo | "fotos", "app", "plataforma" |
 | T004 | I need help with my order... | envios | El modelo puede clasificar en inglés (multilingüe) |
-| T005 | ¡SON UNOS ESTAFADORES! | requiere_humano | Lenguaje agresivo detectado |
+| T005 | ¡SON UNOS ESTAFADORES! | spam | El modelo identificó lenguaje agresivo como spam |
 
 ---
 

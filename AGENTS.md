@@ -32,7 +32,7 @@ The agent is forced via System Prompt and Structured Outputs to return exclusive
 
 ```typescript
 {
-  "categoria": "envios" | "pagos" | "catalogo" | "spam" | "requiere_humano",
+  "categoria": "envios" | "pagos" | "catalogo" | "requiere_humano",
   "confianza": 0.0 to 1.0,
   "razonamiento": "Explanation of maximum 2 lines justifying the categorization"
 }
@@ -43,11 +43,27 @@ When processed through the CLI with Human-in-the-Loop:
 
 ```typescript
 {
-  "categoria": "spam",
+  "categoria": "otros",
   "confianza": 1.0,
-  "razonamiento": "Clasificación manual por operador. Categoría: spam",
+  "razonamiento": "Clasificación manual por operador. Categoría: otros",
   "resolved_by": "Human"  // or "AI"
 }
+```
+
+### Human-in-the-Loop Menu
+When the AI cannot classify with confidence, it triggers HITL. The human sees:
+
+```
+⚠️ ALERTA: La IA solicita revisión manual.
+Razón: Mensaje agresivo detectado
+Mensaje: "¡SON UNOS ESTAFADORES!"
+
+Seleccione la categoría final:
+[1] envios
+[2] pagos
+[3] catalogo
+[4] otros (Consulta atípica legítima)
+> _
 ```
 
 ## 4. Core System Prompt

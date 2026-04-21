@@ -25,7 +25,7 @@ Decidí implementar como un script CLI Node.js en lugar de un servicio web por:
 - **No integración con Zendesk**: Solo demo local.
 - **Rate limits**: Depende de Groq.
 
-## Stack Técnicas
+## Stack Técnico
 
 - **Runtime**: Node.js + TypeScript
 - **LLM**: Groq (llama-3.1-8b-instant)

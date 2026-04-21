@@ -51,57 +51,59 @@ npx ts-node index.ts
 ## Output Esperado
 
 ```text
-╔══════════════════════════════════════════════════════════════════╗
-║               TRIAGE AI - CLASIFICADOR DE TICKETS               ║
-╚══════════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════════════════╗
+║              TRIAGE AI - CLASIFICADOR DE TICKETS                   ║
+╚════════════════════════════════════════════════════════════════════╝
 
-╭──────────────────────────────────────────────────────────────────╮
-│ 📝 Ticket: T001                                                 │
-│    Mensaje: ¿Dónde está mi pedido? Ya pasaron 3 días.           │
-│    Origen:  WhatsApp                                            │
-├──────────────────────────────────────────────────────────────────┤
-│ ✅ Clasificación:                                                │
-│    Categoría: envios                                            │
-│    Confianza: 80%                                               │
-│    Razón: El cliente pregunta sobre el estado de su pedido...   │
-╰──────────────────────────────────────────────────────────────────╯
+╭────────────────────────────────────────────────────────────────────╮
+│ 📝 Ticket: T001                                                    │
+│    Mensaje: ¿Dónde está mi pedido? Ya pasaron 3 días.              │
+│    Origen:  WhatsApp                                               │
+├────────────────────────────────────────────────────────────────────┤
+│ ✅ Clasificación:                                                  │
+│    Categoría: envios                                               │
+│    Confianza: 80%                                                  │
+│    Razón:     El cliente pregunta sobre el estado de su pedido...  │
+╰────────────────────────────────────────────────────────────────────╯
 
 ... (más tickets) ...
 
-╭──────────────────────────────────────────────────────────────────╮
-│ 📝 Ticket: T005                                                 │
-│    Mensaje: ¡SON UNOS ESTAFADORES, QUIERO HABLAR CON UN...      │
-│    Origen:  WhatsApp                                            │
-├──────────────────────────────────────────────────────────────────┤
-│ ⚠️  ALERTA: La IA no pudo clasificar el ticket T005            │
-│    Confianza: 0%                                                │
-├──────────────────────────────────────────────────────────────────┤
-│    Razón: El cliente utiliza un lenguaje agresivo...           │
-├──────────────────────────────────────────────────────────────────┤
-│    Mensaje: ¡SON UNOS ESTAFADORES, QUIERO HABLAR...            │
-└──────────────────────────────────────────────────────────────────┘
+╭────────────────────────────────────────────────────────────────────╮
+│ 📝 Ticket: T005                                                    │
+│    Mensaje: ¡SON UNOS ESTAFADORES, QUIERO HABLAR CON UN...         │
+│    Origen:  WhatsApp                                               │
+├────────────────────────────────────────────────────────────────────┤
 
-   Intervención Humana Requerida. Seleccione la categoría real:
-   [1] envios  [2] pagos  [3] catalogo  [4] spam
+⚠️  ALERTA: La IA solicita revisión manual.
+    Razón: El cliente utiliza un lenguaje agresivo...
+    Mensaje: ¡SON UNOS ESTAFADORES, QUIERO HABLAR...
+
+   Seleccione la categoría final:
+   [1] envios
+   [2] pagos
+   [3] catalogo
+   [4] otros (Consulta atípica legítima)
    > 4
 
-╭──────────────────────────────────────────────────────────────────╮
-│ 👤 Clasificación MANUAL:                                         │
-│    Categoría: spam                                              │
-╰──────────────────────────────────────────────────────────────────╯
+╭────────────────────────────────────────────────────────────────────╮
+│ 👤 Clasificación MANUAL:                                           │
+│    Categoría: otros                                                │
+│    Confianza: 100%                                                 │
+│    Razón:     Clasificación manual por operador. Categoría: otros  │
+╰────────────────────────────────────────────────────────────────────╯
 
-═══════════════════════════════════════════════════════════════════
-                    📊 Reporte de Operaciones AI:                  
-═══════════════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════════════════
+                    📊 Reporte de Operaciones AI:
+════════════════════════════════════════════════════════════════════════
 
-   - Tickets Procesados: 5
-   - Resueltos por IA: 4
-   - Escalados a Humano: 1
-   - Tiempo total de ejecución: 3.3 segundos
-   - Tokens Consumidos: 750 (Prompt) / 150 (Completion)
-   - Costo Estimado: $0.0495 USD
+   - Tickets Procesados:          5
+   - Resueltos por IA:            4
+   - Escalados a Humano:          1
+   - Tiempo total de ejecución:   3.3 segundos
+   - Tokens Consumidos:           750 (Prompt) / 150 (Completion)
+   - Costo Estimado:              $0.0495 USD
 
-═══════════════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════════════════
 ```
 
 ---
@@ -113,8 +115,10 @@ npx ts-node index.ts
 | `envios`         | Estado de pedido, entrega, shipping             |
 | `pagos`          | Cobros, tarjetas, reembolsos                    |
 | `catalogo`       | Productos, fotos, uso de la plataforma         |
-| `spam`           | Mensajes agresivos, insultos, spam             |
-| `requiere_humano`| No clasificable - para escalamiento interno     |
+| `otros`          | Consultas atípicaslegítimas no clasificables    |
+| `requiere_humano`| No clasificable - vía de escape de la IA         |
+
+**Nota**: `requiere_humano` es solo para la IA. El humano en HITL tiene las opciones: envios, pagos, catalogo, otros.
 
 ---
 
@@ -149,12 +153,10 @@ triage-ai/
 │   └── ui/             # Presentación (cajas, tablas)
 ├── data/
 │   └── tickets.json    # Datos de prueba
-├── docs/
-│   ├── DECISIONS.md
-│   └── PROCESS.md
 ├── README.md
+├── DECISIONS.md         # Decisiones de diseño
+├── PROCESS.md           # Bitácora de construcción
 ├── AGENTS.md
-├── IMPLEMENTATION_PLAN.md
 └── package.json
 ```
 

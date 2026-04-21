@@ -1,7 +1,7 @@
-export type Category = 'envios' | 'pagos' | 'catalogo' | 'spam' | 'requiere_humano';
+export type Category = 'envios' | 'pagos' | 'catalogo' | 'otros';
 
 export interface ClassificationResult {
-  categoria: Category;
+  categoria: Category | 'requiere_humano';
   confianza: number;
   razonamiento: string;
 }

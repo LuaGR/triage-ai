@@ -12,15 +12,13 @@ Eres un clasificador de tickets para 'PuebloLindo'. Clasifica el mensaje en UNA 
 - "envios": Consulta sobre estado de pedido, entrega, shipping o ubicación.
 - "pagos": Menciona cobros, tarjetas, reembolsos, facturación o precios.
 - "catalogo": Pregunta sobre productos, fotos, uso de la plataforma.
-- "spam": Mensajes agresivos, insultos, spam, sin sentido.
-- "requiere_humano": No clasificable en las anteriores.
+- "requiere_humano": No clasificable en las anteriores, agresivo, insultos, o cualquier duda.
 
 REGLAS:
 1. JSON válido con: "categoria", "confianza", "razonamiento".
-2. Mensajes agresivos o spam → spam.
-3. Cualquier duda → requiere_humano.
-4. Confianza: 0.0 a 1.0.
-5. Razonamiento: máximo 2 líneas.
+2. Cualquier duda o mensaje problemático → requiere_humano.
+3. Confianza: 0.0 a 1.0.
+4. Razonamiento: máximo 2 líneas.
 ```
 
 ### Prompts que Fallaron
@@ -47,7 +45,7 @@ Clasifica este mensaje en: envios, pagos, catalogo, o requiere_humano
 
 ### Cambio 2: CLI en Lugar de Interfaz Web
 
-**Antes**: Se省委 una interfaz web (Next.js) o API REST para ejecutar el clasificador.  
+**Antes**: Se consideró una interfaz web (Next.js) o API REST para ejecutar el clasificador.  
 **Después**: Script CLI que procesa un archivo JSON estático directamente en terminal.
 
 **Por qué**: 
@@ -115,7 +113,7 @@ Intervención Humana Requerida. Seleccione la categoría real:
 | T002: "cobrar", "tarjeta" → pagos | ✅ Coincide |
 | T003: "fotos", "app" → catalogo | ✅ Coincide |
 | T004: "order", "broken" → envios | ✅ Coincide |
-| T005: "estafadores", "gerente" → spam | ✅ Coincide |
+| T005: "estafadores", "gerente" → AI: requiere_humano → HITL → Humano: otros | ✅ Coincide |
 
 **Qué busqué**:
 - ¿El razonamiento menciona keywords que existen en el mensaje original?
@@ -126,13 +124,13 @@ Intervención Humana Requerida. Seleccione la categoría real:
 
 ### Verificación: Casos de Prueba
 
-| ID | Mensaje | Clasificación | Por qué no-hallucination |
-|----|---------|---------------|------------------------|
-| T001 | ¿Dónde está mi pedido? | envios | Clasificado por el LLM basándose en keywords |
-| T002 | Me cobraron dos veces | pagos | El modelo correctamente identificó "cobrar" |
-| T003 | La app no me deja subir fotos | catalogo | "fotos", "app", "plataforma" |
-| T004 | I need help with my order... | envios | El modelo puede clasificar en inglés (multilingüe) |
-| T005 | ¡SON UNOS ESTAFADORES! | spam | El modelo identificó lenguaje agresivo como spam |
+| ID | Mensaje | Clasificación AI | Resultado Final | Flujo |
+|----|---------|------------------|-----------------|-------|
+| T001 | ¿Dónde está mi pedido? | envios | envios | Resuelto por IA |
+| T002 | Me cobraron dos veces | pagos | pagos | Resuelto por IA |
+| T003 | La app no me deja subir fotos | catalogo | catalogo | Resuelto por IA |
+| T004 | I need help with my order... | envios | envios | Resuelto por IA (multilingüe) |
+| T005 | ¡SON UNOS ESTAFADORES! | requiere_humano | otros | AI: requiere_humano → HITL → Humano: otros |
 
 ---
 

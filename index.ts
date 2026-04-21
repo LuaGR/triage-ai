@@ -39,7 +39,7 @@ async function main() {
     } catch (error) {
       results.push({
         id: ticket.id,
-        categoria: 'spam',
+        categoria: 'otros',
         confianza: 0,
         razonamiento: `Error en clasificación: ${String(error)}`,
         resolved_by: 'Human',
